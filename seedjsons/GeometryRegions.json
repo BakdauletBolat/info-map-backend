@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "name": "Туркестанская область",
+        "slug": "turkestan-region",
+        "dwelling_count": 9182,
+        "population_count": 27426,
+        "description": "Сохранять запеть костер миф поколение. Угроза бегать район.",
+        "parent_id": null,
+        "latitude": 43.30792539071072,
+        "longitude": 68.29749620681707,
+        "zoom": 11
+    }
+]

@@ -5,8 +5,8 @@ from geometry.models import GeometryObject, GeometryObjectCategory
 # Register your models here.
 @admin.register(GeometryObject)
 class GeometryObjectAdmin(admin.ModelAdmin):
-    list_display = ("id", "village","info")
-    list_filter = ("village__village_district__district",)
+    list_display = ("id", "region", "info")
+    list_filter = ("region",)
 
 
 @admin.register(GeometryObjectCategory)

@@ -1,6 +1,6 @@
 from django.db import models
 
-from district.models import Village
+from district.models import GeographicRegion
 
 
 class GeometryObjectCategory(models.Model):
@@ -11,5 +11,5 @@ class GeometryObjectCategory(models.Model):
 class GeometryObject(models.Model):
     geometry = models.JSONField()
     info = models.JSONField()
-    village = models.ForeignKey(Village, on_delete=models.CASCADE)
+    region = models.ForeignKey(GeographicRegion, on_delete=models.CASCADE, related_name='geometry_object')
     category = models.ForeignKey(GeometryObjectCategory, on_delete=models.DO_NOTHING, default=None)

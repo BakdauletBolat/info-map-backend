@@ -1,0 +1,27 @@
+services:
+  recorder-db:
+    container_name: recorder-db
+    image: postgres:15.1
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=recorder
+      - POSTGRES_USER=recorder
+      - POSTGRES_PASSWORD=baguvix123FFF
+    ports:
+      - "5432:5432"
+  web:
+    build: .
+    command: "gunicorn --bind 0.0.0.0:8000 district_map_backend.wsgi:application"
+#    command: "python manage.py runserver 0.0.0.0:8000"
+    env_file:
+      - .env
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - recorder-db
+
+volumes:
+  postgres_data:

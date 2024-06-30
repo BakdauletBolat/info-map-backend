@@ -1,15 +1,20 @@
 from rest_framework import viewsets
-from district.models import Village
+from district.models import GeographicRegion
 from rest_framework.request import Request
 from rest_framework.response import Response
-from district.serializers import VillageSerializer
+from district.serializers import GeographicRegionResponseSerializer
 from rest_framework.decorators import action
 
 
-class VillageViewSet(viewsets.ViewSet):
-    queryset = Village.objects.all()
-    serializer_class = VillageSerializer
+class GeographicRegionViewSet(viewsets.ViewSet):
+    queryset = GeographicRegion.objects.all()
+    serializer_class = GeographicRegionResponseSerializer
 
     def retrieve(self, request: Request, pk:str):
-        results = self.queryset.filter(village_district__district__slug=pk)
-        return Response(self.serializer_class(instance=results, many=True).data)
+        geographic_region = self.queryset.get(slug=pk)
+        instance = {
+            'region': geographic_region
+        }
+        return Response(self.serializer_class(instance=instance, context={
+            'request': request
+        }).data)

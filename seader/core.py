@@ -18,19 +18,14 @@ class JsonSeeder(object):
         self.model.objects.bulk_create(bulk_operations, ignore_conflicts=True)
 
 
-class DistrictSeeder(JsonSeeder):
-    model = models.District
-    file_path = './seedjsons/districts.json'
+class GeometryRegionSeeder(JsonSeeder):
+    model = models.GeographicRegion
+    file_path = './seedjsons/GeometryRegions.json'
 
 
-class DistrictVillageSeeder(JsonSeeder):
-    model = models.VillageDistrict
-    file_path = './seedjsons/districts_villages.json'
-
-
-class VillageSeeder(JsonSeeder):
-    model = models.Village
-    file_path = './seedjsons/villages.json'
+class GeometryRegionChildSeeder(JsonSeeder):
+    model = models.GeographicRegion
+    file_path = './seedjsons/GeometryRegionsChilds.json'
 
 
 class GeometryCategorySeeder(JsonSeeder):

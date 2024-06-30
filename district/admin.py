@@ -2,17 +2,12 @@ from django.contrib import admin
 from district import models
 
 
-@admin.register(models.District)
-class DistrictAdmin(admin.ModelAdmin):
-    pass
+class GeographicRegionTabularAdmin(admin.TabularInline):
+    model = models.GeographicRegion
+    fields = ("id", "name", "photo")
 
 
-@admin.register(models.VillageDistrict)
-class VillageDistrictAdmin(admin.ModelAdmin):
-    list_filter = ("district", )
+@admin.register(models.GeographicRegion)
+class GeographicRegionAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
-
-
-@admin.register(models.Village)
-class VillageAdmin(admin.ModelAdmin):
-    pass
+    inlines = [GeographicRegionTabularAdmin]

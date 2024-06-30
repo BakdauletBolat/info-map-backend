@@ -1,13 +1,15 @@
+from typing import List
+from geometry.actions import CreateGeometryObjectAction
 from rest_framework import viewsets
 from rest_framework.response import Response
 from geometry.models import GeometryObjectCategory, GeometryObject
 from geometry.serializers import GeometryCategorySerializer, GeometryObjectSerializer, \
     GeometryObjectQueryParamsSerializer
 from django.db.models import QuerySet
+from district.models import GeographicRegion
 
 
 class GeometryCategoryViewSet(viewsets.ViewSet):
-
     serializer_class = GeometryCategorySerializer
     queryset = GeometryObjectCategory.objects.all()
 
@@ -16,22 +18,27 @@ class GeometryCategoryViewSet(viewsets.ViewSet):
 
 
 class GeometryViewSet(viewsets.ViewSet):
-
     serializer_class = GeometryObjectSerializer
     queryset = GeometryObject.objects.all()
     query_params_serializer = GeometryObjectQueryParamsSerializer
 
-    @staticmethod
-    def _get_filtered_queryset(queryset: QuerySet, query_params: dict):
+    def _get_all_ids_from_regions(self, regions: List[GeographicRegion], ids: set):
+        for region in regions:
+            if len(region.children.all()) > 0:
+                ids.add(region.id)
+                self._get_all_ids_from_regions(region.children.all(), ids)
+            else:
+                ids.add(region.id)
+
+    def _get_filtered_queryset(self, queryset: QuerySet, query_params: dict):
         return_query_set = queryset
         if (category_ids := query_params.get('category_ids')) is not None:
             return_query_set = return_query_set.filter(category_id__in=category_ids)
-        if (village_ids := query_params.get('village_ids')) is not None:
-            return_query_set = return_query_set.filter(village_id__in=village_ids)
-        if (villages_district_ids := query_params.get('villages_district_ids')) is not None:
-            return_query_set = return_query_set.filter(village__village_district_id__in=villages_district_ids)
-        if (district_ids := query_params.get('district_ids')) is not None:
-            return_query_set = return_query_set.filter(village__village_district__district_id__in=district_ids)
+        if (geographic_region_id := query_params.get('geographic_region_id')) is not None:
+            ids = set()
+            region = GeographicRegion.objects.get(id=geographic_region_id)
+            self._get_all_ids_from_regions([region], ids)
+            return_query_set = return_query_set.filter(region_id__in=ids)
         return return_query_set
 
     def list(self, request):
@@ -41,3 +48,6 @@ class GeometryViewSet(viewsets.ViewSet):
         queryset = self._get_filtered_queryset(queryset=self.queryset, query_params=query_params)
         return Response(self.serializer_class(instance=queryset, many=True, context={'request': request}).data)
 
+    def create(self, request):
+        obj = CreateGeometryObjectAction.run(data=request.data)
+        return Response({"id": obj.id})
