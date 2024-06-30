@@ -1,6 +1,5 @@
 services:
-  recorder-db:
-    container_name: recorder-db
+  db:
     image: postgres:15.1
     volumes:
       - postgres_data:/var/lib/postgresql/data/
@@ -9,7 +8,7 @@ services:
       - POSTGRES_USER=recorder
       - POSTGRES_PASSWORD=baguvix123FFF
     ports:
-      - "5432:5432"
+      - "5433:5432"
   web:
     build: .
     command: "gunicorn --bind 0.0.0.0:8000 district_map_backend.wsgi:application"
@@ -19,9 +18,9 @@ services:
     volumes:
       - .:/code
     ports:
-      - "8000:8000"
+      - "8001:8000"
     depends_on:
-      - recorder-db
+      - db
 
 volumes:
   postgres_data:

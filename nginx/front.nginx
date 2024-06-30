@@ -1,8 +1,8 @@
 server {
     listen 80;
-    server_name widget.timebook.kz;
+    server_name widget.bolatb.kz;
 
-    root /var/www/widget-recorder/dist;
+    root /var/www/info-map-front/dist;
 
     index index.html;
 
