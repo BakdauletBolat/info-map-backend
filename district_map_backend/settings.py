@@ -35,7 +35,7 @@ except ImportError:
     from .prod_settings import *
     DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["back.bolatb.kz"]
 
 # Application definition
 
@@ -137,3 +137,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+CSRF_TRUSTED_ORIGINS = ["https://back.bolatb.kz"]
