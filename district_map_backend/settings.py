@@ -35,7 +35,7 @@ except ImportError:
     from .prod_settings import *
     DEBUG = False
 
-ALLOWED_HOSTS = ["back.bolatb.kz"]
+ALLOWED_HOSTS = ["back.bolatb.kz", "localhost"]
 
 # Application definition
 
