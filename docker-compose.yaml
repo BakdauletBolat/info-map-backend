@@ -8,6 +8,7 @@ services:
       - POSTGRES_USER=recorder
       - POSTGRES_PASSWORD=baguvix123FFF
     command: -p 5433
+    restart: unless-stopped
     ports:
       - "5433:5432"
   web:
@@ -20,6 +21,7 @@ services:
       - .:/code
     ports:
       - "8001:8000"
+    restart: unless-stopped
     depends_on:
       - db
 
