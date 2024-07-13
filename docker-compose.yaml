@@ -20,7 +20,7 @@ services:
     volumes:
       - .:/code
     ports:
-      - "8001:8000"
+      - "8000:8000"
     restart: unless-stopped
     depends_on:
       - db
