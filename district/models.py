@@ -10,11 +10,11 @@ class RegionLevel(enum.Enum):
 
 
 class GeographicRegion(TimeStampedModel):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, verbose_name='Название')
     slug = models.SlugField(unique=True)
-    description = models.TextField(null=True, blank=True)
-    dwelling_count = models.IntegerField(default=0)
-    population_count = models.IntegerField(default=0)
+    description = models.TextField(null=True, blank=True, verbose_name='Описание')
+    dwelling_count = models.IntegerField(default=0,verbose_name='Тургын уй')
+    population_count = models.IntegerField(default=0, verbose_name='Адам саны')
     parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='children', null=True, blank=True)
     latitude = models.FloatField()
     longitude = models.FloatField()
@@ -33,3 +33,7 @@ class GeographicRegion(TimeStampedModel):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'Регион'
+        verbose_name_plural = 'Регионы'

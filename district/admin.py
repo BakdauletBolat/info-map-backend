@@ -9,5 +9,8 @@ class GeographicRegionTabularAdmin(admin.TabularInline):
 
 @admin.register(models.GeographicRegion)
 class GeographicRegionAdmin(admin.ModelAdmin):
-    list_display = ("id", "name")
+    list_display = ("id", "name", "dwelling_count", "population_count")
+    list_display_links = ("id", "name")
+    # exclude = ('slug',)
+    prepopulated_fields = {'slug': ('name',)}
     inlines = [GeographicRegionTabularAdmin]
