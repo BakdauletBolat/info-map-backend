@@ -7,7 +7,7 @@ services:
       - POSTGRES_DB=recorder
       - POSTGRES_USER=recorder
       - POSTGRES_PASSWORD=baguvix123FFF
-    command: -p 5433
+    command: postgres -c listen_addresses='*' -p 5432
     restart: unless-stopped
     ports:
       - "5433:5432"
