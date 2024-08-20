@@ -18,7 +18,9 @@ class GeographicRegionSerializer(serializers.Serializer):
     info = serializers.SerializerMethodField()
 
     def get_info(self, obj):
-        return obj.info
+        if hasattr(obj, "info"):
+            return obj.info.information_keys
+        return None
 
     def get_children(self, obj):
         if obj.children.all():
