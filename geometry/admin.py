@@ -10,5 +10,5 @@ class GeometryObjectAdmin(admin.ModelAdmin):
 
 
 @admin.register(GeometryObjectCategory)
-class GeometryObjectAdmin(admin.ModelAdmin):
-    pass
+class GeometryObjectCategoryAdmin(admin.ModelAdmin):
+    list_display = ("id", "name")

@@ -5,9 +5,9 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'district_map_backend.settings')
 
 django.setup()
 
-from seader.core import GeometryRegionSeeder, GeometryCategorySeeder, GeometryRegionChildSeeder, GeometrySeeder
+from seader.core import GeoInfoSeeder
 
-seeders = [GeometryCategorySeeder(), GeometryRegionSeeder(), GeometryRegionChildSeeder()]
+seeders = [GeoInfoSeeder()]
 
 for seed in seeders:
     logger.info(f"Seeding {seed.model.__name__}")

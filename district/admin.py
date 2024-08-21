@@ -7,6 +7,11 @@ class GeographicRegionTabularAdmin(admin.TabularInline):
     fields = ("id", "name", "photo")
 
 
+@admin.register(models.RegionInfo)
+class RegionInfoAdmin(admin.ModelAdmin):
+    list_display = ("id", "category")
+
+
 @admin.register(models.GeographicRegion)
 class GeographicRegionAdmin(admin.ModelAdmin):
     list_display = ("id", "name", "dwelling_count", "population_count")

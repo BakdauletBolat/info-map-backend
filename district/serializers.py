@@ -32,3 +32,13 @@ class GeographicRegionSerializer(serializers.Serializer):
 
 class GeographicRegionResponseSerializer(serializers.Serializer):
     region = GeographicRegionSerializer()
+
+
+class GeographicRegionInfo(serializers.Serializer):
+    title = serializers.CharField()
+    value = serializers.CharField()
+
+
+class GeographicRegionInfoCreateSerializer(serializers.Serializer):
+    information_keys = serializers.JSONField(default=[])
+    category_id = serializers.IntegerField()

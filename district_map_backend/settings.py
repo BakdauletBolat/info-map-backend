@@ -33,7 +33,7 @@ try:
     DEBUG = True
 except ImportError:
     from .prod_settings import *
-    DEBUG = False
+    DEBUG = True
 
 ALLOWED_HOSTS = ["back.bolatb.kz", "localhost"]
 
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework.authtoken',
     'corsheaders',
     'rest_framework',
     'district_map_backend',
@@ -132,3 +133,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_TRUSTED_ORIGINS = ["https://back.bolatb.kz"]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}

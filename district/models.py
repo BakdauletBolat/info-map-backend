@@ -3,7 +3,6 @@ import enum
 from django.db import models
 from district_map_backend.models import TimeStampedModel
 
-
 class RegionLevel(enum.Enum):
     COUNTRY = 0
 
@@ -40,4 +39,6 @@ class GeographicRegion(TimeStampedModel):
 
 class RegionInfo(TimeStampedModel):
     information_keys = models.JSONField(default=[])
+    category = models.ForeignKey("geometry.GeometryObjectCategory", on_delete=models.CASCADE,
+                                 related_name='info', null=True, blank=True)
     region = models.OneToOneField(GeographicRegion, on_delete=models.CASCADE, related_name='info')
