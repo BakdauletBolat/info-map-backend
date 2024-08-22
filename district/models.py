@@ -40,5 +40,5 @@ class GeographicRegion(TimeStampedModel):
 class RegionInfo(TimeStampedModel):
     information_keys = models.JSONField(default=[])
     category = models.ForeignKey("geometry.GeometryObjectCategory", on_delete=models.CASCADE,
-                                 related_name='info', null=True, blank=True)
-    region = models.OneToOneField(GeographicRegion, on_delete=models.CASCADE, related_name='info')
+                                 related_name='infos', null=True, blank=True)
+    region = models.ForeignKey(GeographicRegion, on_delete=models.CASCADE, related_name='infos')

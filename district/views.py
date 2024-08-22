@@ -33,10 +33,9 @@ class GeographicRegionViewSet(viewsets.ViewSet):
         region = GeographicRegion.objects.get(id=pk)
         region.description = data.get("description")
         region.save()
-        info = RegionInfo.objects.filter(region_id=pk).first()
+        info = RegionInfo.objects.filter(region_id=pk, category_id=data.get('category_id')).first()
         if not info:
             info = RegionInfo.objects.create(region_id=pk)
-
 
         info.information_keys = data.get('information_keys')
         info.category_id = data.get('category_id')
@@ -50,14 +49,14 @@ class GeographicRegionViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
         category = GeometryObjectCategory.objects.get(id=serializer.validated_data['category_id'])
         region = GeographicRegion.objects.get(slug=serializer.validated_data['region_slug'])
-        infos = region.info.filter(category=category)
+        infos = region.infos.filter(category=category).first()
         
         data = {
             'region_name': region.name,
             'region_id': region.id,
             'description': region.description,
             'category_name': category.name,
-            'infos': infos
+            'infos': infos.information_keys if infos is not None else []
         }
         
         return Response(GeographicRegionInfoGetSerializer(data).data, status=200)
