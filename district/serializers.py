@@ -42,3 +42,17 @@ class GeographicRegionInfo(serializers.Serializer):
 class GeographicRegionInfoCreateSerializer(serializers.Serializer):
     information_keys = serializers.JSONField(default=[])
     category_id = serializers.IntegerField()
+    description = serializers.CharField()
+
+
+
+class GeographicRegionInfoCreateGetSerializer(serializers.Serializer):
+    region_slug = serializers.CharField()
+    category_id = serializers.IntegerField()
+
+
+class GeographicRegionInfoGetSerializer(serializers.Serializer):
+    region_name = serializers.CharField()
+    region_id = serializers.IntegerField()
+    category_name = serializers.CharField()
+    infos = serializers.JSONField()

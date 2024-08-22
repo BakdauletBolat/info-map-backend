@@ -2,9 +2,11 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from district.models import GeographicRegion, RegionInfo
+from geometry.models import GeometryObjectCategory
 from rest_framework.request import Request
 from rest_framework.response import Response
-from district.serializers import GeographicRegionResponseSerializer, GeographicRegionInfoCreateSerializer
+from district.serializers import (GeographicRegionResponseSerializer, GeographicRegionInfoCreateSerializer, 
+                                  GeographicRegionInfoGetSerializer, GeographicRegionInfoCreateGetSerializer)
 from rest_framework import decorators
 
 
@@ -26,13 +28,36 @@ class GeographicRegionViewSet(viewsets.ViewSet):
     def update_info(self, request: Request, pk: str):
         serializer = GeographicRegionInfoCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
+        data = serializer.validated_data
+        
+        region = GeographicRegion.objects.get(id=pk)
+        region.description = data.get("description")
+        region.save()
         info = RegionInfo.objects.filter(region_id=pk).first()
         if not info:
             info = RegionInfo.objects.create(region_id=pk)
 
-        data = serializer.data
+
         info.information_keys = data.get('information_keys')
         info.category_id = data.get('category_id')
         info.save()
         return Response({"status": True}, status=200)
+    
+
+    @decorators.action(methods=["GET"], detail=False)
+    def get_update_info(self, request: Request):
+        serializer = GeographicRegionInfoCreateGetSerializer(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+        category = GeometryObjectCategory.objects.get(id=serializer.validated_data['category_id'])
+        region = GeographicRegion.objects.get(slug=serializer.validated_data['region_slug'])
+        infos = region.info.filter(category=category)
+        
+        data = {
+            'region_name': region.name,
+            'region_id': region.id,
+            'description': region.description,
+            'category_name': category.name,
+            'infos': infos
+        }
+        
+        return Response(GeographicRegionInfoGetSerializer(data).data, status=200)
