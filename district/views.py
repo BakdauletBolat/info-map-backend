@@ -17,7 +17,7 @@ class GeographicRegionViewSet(viewsets.ViewSet):
 
     def get_permissions(self):
         if self.action == 'retrieve':
-            return [AllowAny]
+            return [AllowAny()]
         return [IsAuthenticated]
 
     def retrieve(self, request: Request, pk: str):

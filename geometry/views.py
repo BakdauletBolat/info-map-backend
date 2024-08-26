@@ -13,7 +13,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 class GeometryCategoryViewSet(viewsets.ViewSet):
     serializer_class = GeometryCategorySerializer
     queryset = GeometryObjectCategory.objects.all()
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny()]
 
     def list(self, request):
         return Response(self.serializer_class(self.queryset, many=True, context={'request': request}).data)
@@ -27,7 +27,7 @@ class GeometryViewSet(viewsets.ViewSet):
     def get_permissions(self):
         if self.action == 'create':
             return [IsAuthenticated]
-        return [AllowAny]
+        return [AllowAny()]
 
     def _get_all_ids_from_regions(self, regions: List[GeographicRegion], ids: set):
         for region in regions:
