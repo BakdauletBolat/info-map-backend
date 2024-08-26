@@ -13,7 +13,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 class GeometryCategoryViewSet(viewsets.ViewSet):
     serializer_class = GeometryCategorySerializer
     queryset = GeometryObjectCategory.objects.all()
-    permission_classes = [AllowAny()]
+    permission_classes = [AllowAny]
 
     def list(self, request):
         return Response(self.serializer_class(self.queryset, many=True, context={'request': request}).data)
