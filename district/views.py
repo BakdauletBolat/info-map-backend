@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from district.models import GeographicRegion, RegionInfo
 from geometry.models import GeometryObjectCategory
@@ -14,6 +14,11 @@ class GeographicRegionViewSet(viewsets.ViewSet):
     queryset = GeographicRegion.objects.all()
     serializer_class = GeographicRegionResponseSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            return [AllowAny]
+        return [IsAuthenticated]
 
     def retrieve(self, request: Request, pk: str):
         geographic_region = self.queryset.get(slug=pk)
