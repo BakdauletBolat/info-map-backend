@@ -5,7 +5,7 @@ from district.models import GeographicRegion, RegionInfo
 from geometry.models import GeometryObjectCategory
 from rest_framework.request import Request
 from rest_framework.response import Response
-from district.serializers import (GeographicRegionResponseSerializer, GeographicRegionInfoCreateSerializer, 
+from district.serializers import (GeographicRegionResponseSerializer, GeographicRegionInfoCreateSerializer,
                                   GeographicRegionInfoGetSerializer, GeographicRegionInfoCreateGetSerializer)
 from rest_framework import decorators
 
@@ -16,9 +16,9 @@ class GeographicRegionViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_permissions(self):
-        if self.action == 'retrieve':
+        if self.action in ['retrieve', 'get_update_info']:
             return [AllowAny()]
-        return [IsAuthenticated]
+        return [IsAuthenticated()]
 
     def retrieve(self, request: Request, pk: str):
         geographic_region = self.queryset.get(slug=pk)
@@ -34,7 +34,7 @@ class GeographicRegionViewSet(viewsets.ViewSet):
         serializer = GeographicRegionInfoCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
-        
+
         region = GeographicRegion.objects.get(id=pk)
         region.description = data.get("description")
         region.save()
@@ -46,7 +46,6 @@ class GeographicRegionViewSet(viewsets.ViewSet):
         info.category_id = data.get('category_id')
         info.save()
         return Response({"status": True}, status=200)
-    
 
     @decorators.action(methods=["GET"], detail=False)
     def get_update_info(self, request: Request):
@@ -55,7 +54,7 @@ class GeographicRegionViewSet(viewsets.ViewSet):
         category = GeometryObjectCategory.objects.get(id=serializer.validated_data['category_id'])
         region = GeographicRegion.objects.get(slug=serializer.validated_data['region_slug'])
         infos = region.infos.filter(category=category).first()
-        
+
         data = {
             'region_name': region.name,
             'region_id': region.id,
@@ -63,5 +62,5 @@ class GeographicRegionViewSet(viewsets.ViewSet):
             'category_name': category.name,
             'infos': infos.information_keys if infos is not None else []
         }
-        
+
         return Response(GeographicRegionInfoGetSerializer(data).data, status=200)

@@ -26,7 +26,7 @@ class GeometryViewSet(viewsets.ViewSet):
 
     def get_permissions(self):
         if self.action == 'create':
-            return [IsAuthenticated]
+            return [IsAuthenticated()]
         return [AllowAny()]
 
     def _get_all_ids_from_regions(self, regions: List[GeographicRegion], ids: set):
