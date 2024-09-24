@@ -57,7 +57,13 @@ class GeometryViewSet(viewsets.ViewSet):
         query_params_serializer.is_valid(raise_exception=True)
         query_params = query_params_serializer.validated_data
         queryset = self._get_filtered_queryset(queryset=self.queryset, query_params=query_params)
-        return Response(self.serializer_class(instance=queryset, many=True, context={'request': request}).data)
+
+        data = self.serializer_class(instance=queryset, many=True, context={'request': request}).data
+
+        for item in data:
+            item['geometry']['id'] = item['id']
+
+        return Response(data)
 
     def create(self, request):
         obj = CreateGeometryObjectAction.run(data=request.data)
