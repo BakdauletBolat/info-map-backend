@@ -1,5 +1,9 @@
 from typing import List
-from geometry.actions import CreateGeometryObjectAction
+
+from rest_framework.generics import get_object_or_404
+
+from geometry.actions import CreateGeometryObjectAction, \
+    UpdateGeometryObjectAction
 from rest_framework import viewsets
 from rest_framework.response import Response
 from geometry.models import GeometryObjectCategory, GeometryObject
@@ -58,3 +62,11 @@ class GeometryViewSet(viewsets.ViewSet):
     def create(self, request):
         obj = CreateGeometryObjectAction.run(data=request.data)
         return Response({"id": obj.id})
+
+    def update(self, request, pk=None):
+        obj = UpdateGeometryObjectAction.run(data=request.data, pk=pk)
+        return Response({"id": obj.id})
+
+    def retrieve(self, request, pk=None):
+        obj = get_object_or_404(GeometryObject, pk=pk)
+        return Response(self.serializer_class(instance=obj, context={'request': request}).data)

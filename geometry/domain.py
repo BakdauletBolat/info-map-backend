@@ -20,8 +20,13 @@ class GeoJsonCollection(BaseModel):
     features: List[GeoJson]
 
 
-class CreateGeometryObjectDomain(BaseModel):
+class BaseGeometryObjectDomain(BaseModel):
     geometry: GeoJsonCollection = Field(..., description="Гео Json Обьект")
     info: Dict[str, Any] = Field(..., description="Инфо")
+
+class CreateGeometryObjectDomain(BaseGeometryObjectDomain):
     region_id: int = Field(...)
     category_id: int = Field(...)
+
+class UpdateGeometryObjectDomain(BaseGeometryObjectDomain):
+    category_id: int | None = Field(...)
