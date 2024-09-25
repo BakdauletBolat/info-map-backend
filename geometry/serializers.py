@@ -10,6 +10,7 @@ class GeometryCategorySerializer(serializers.Serializer):
 class GeometryObjectSerializer(serializers.Serializer):
 
     id = serializers.IntegerField()
+    region_slug = serializers.CharField(source="region.slug")
     geometry = serializers.JSONField()
     info = serializers.JSONField(allow_null=True)
     category = GeometryCategorySerializer()
