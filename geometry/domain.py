@@ -29,4 +29,4 @@ class CreateGeometryObjectDomain(BaseGeometryObjectDomain):
     category_id: int = Field(...)
 
 class UpdateGeometryObjectDomain(BaseGeometryObjectDomain):
-    category_id: int | None = Field(...)
+    category_id: int | None = Field(default=None)

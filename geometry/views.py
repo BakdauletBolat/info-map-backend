@@ -69,7 +69,7 @@ class GeometryViewSet(viewsets.ViewSet):
         obj = CreateGeometryObjectAction.run(data=request.data)
         return Response({"id": obj.id})
 
-    def update(self, request, pk=None):
+    def update(self, request, pk: int):
         obj = UpdateGeometryObjectAction.run(data=request.data, pk=pk)
         return Response({"id": obj.id})
 

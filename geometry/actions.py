@@ -18,7 +18,7 @@ class UpdateGeometryObjectAction:
     def run(data: dict, pk: int):
         geometry = UpdateGeometryObjectDomain(**data)
         obj = GeometryObject.objects.get(id=pk)
-        obj.geometry = geometry.geometry
+        obj.geometry = geometry.geometry.model_dump()
         obj.info = geometry.info
         if geometry.category_id is not None:
             obj.category_id = geometry.category_id
