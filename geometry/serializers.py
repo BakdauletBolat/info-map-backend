@@ -6,11 +6,17 @@ class GeometryCategorySerializer(serializers.Serializer):
     icon = serializers.FileField()
     id = serializers.IntegerField()
 
+class RegionSerialzer(serializers.Serializer):
+
+    slug = serializers.CharField()
+    latitude = serializers.FloatField()
+    longitude = serializers.FloatField()
+    zoom = serializers.IntegerField()
 
 class GeometryObjectSerializer(serializers.Serializer):
 
     id = serializers.IntegerField()
-    region_slug = serializers.CharField(source="region.slug")
+    region = RegionSerialzer()
     geometry = serializers.JSONField()
     info = serializers.JSONField(allow_null=True)
     category = GeometryCategorySerializer()
