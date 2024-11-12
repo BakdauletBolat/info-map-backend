@@ -73,6 +73,11 @@ class GeometryViewSet(viewsets.ViewSet):
         obj = UpdateGeometryObjectAction.run(data=request.data, pk=pk)
         return Response({"id": obj.id})
 
+    def destroy(self, request, pk: int):
+        obj = self.queryset.get(id=pk)
+        obj.delete()
+        return Response({}, status=204)
+
     def retrieve(self, request, pk=None):
         obj = get_object_or_404(GeometryObject, pk=pk)
         return Response(self.serializer_class(instance=obj, context={'request': request}).data)
