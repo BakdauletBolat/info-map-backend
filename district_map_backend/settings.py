@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'district_map_backend',
     'geometry',
-    'district'
+    'district',
+    'auth_user'
 ]
 
 MIDDLEWARE = [

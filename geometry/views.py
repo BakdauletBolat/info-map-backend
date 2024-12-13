@@ -20,7 +20,12 @@ class GeometryCategoryViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
     def list(self, request):
-        return Response(self.serializer_class(self.queryset, many=True, context={'request': request}).data)
+        queryset = self.queryset
+        if request.user.is_authenticated and hasattr(request.user, 'profile'):
+            categories = request.user.profile.role.categories.all().values_list('id')
+            queryset = self.queryset.filter(id__in=categories)
+
+        return Response(self.serializer_class(queryset, many=True, context={'request': request}).data)
 
 
 class GeometryViewSet(viewsets.ViewSet):
@@ -56,6 +61,12 @@ class GeometryViewSet(viewsets.ViewSet):
         query_params_serializer = self.query_params_serializer(data=request.GET)
         query_params_serializer.is_valid(raise_exception=True)
         query_params = query_params_serializer.validated_data
+
+        if request.user.is_authenticated and hasattr(request.user, 'profile'):
+            categories = request.user.profile.role.categories.all().values_list('id')
+            query_params['category_ids'] = [*categories, *query_params.get('category_ids', [])]
+            print(query_params)
+
         queryset = self._get_filtered_queryset(queryset=self.queryset, query_params=query_params)
 
         data = self.serializer_class(instance=queryset, many=True, context={'request': request}).data
