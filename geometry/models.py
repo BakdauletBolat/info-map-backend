@@ -18,9 +18,15 @@ class GeometryObjectCategory(models.Model):
 class GeometryObject(models.Model):
     geometry = models.JSONField()
     info = models.JSONField()
+    latitude = models.FloatField(default=0)
+    longitude = models.FloatField(default=0)
     region = models.ForeignKey(GeographicRegion, on_delete=models.CASCADE, related_name='geometry_object')
     category = models.ForeignKey(GeometryObjectCategory, on_delete=models.DO_NOTHING, default=None)
 
     class Meta:
         verbose_name = 'Гео обьекты'
         verbose_name_plural = 'Гео обьекты'
+        indexes = [
+            models.Index(fields=['latitude']),
+            models.Index(fields=['longitude']),
+        ]

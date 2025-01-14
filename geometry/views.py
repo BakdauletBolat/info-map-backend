@@ -1,5 +1,6 @@
 from typing import List
 
+from geometry.utils import get_nearby_locations
 from rest_framework.generics import get_object_or_404
 
 from geometry.actions import CreateGeometryObjectAction, \
@@ -68,6 +69,15 @@ class GeometryViewSet(viewsets.ViewSet):
             print(query_params)
 
         queryset = self._get_filtered_queryset(queryset=self.queryset, query_params=query_params)
+
+        if query_params.get('latitude', None):
+            radius_in_meters = 5 * 10000  
+
+            queryset = get_nearby_locations(query_params.get('latitude'), 
+                                            query_params.get('longitude'), 
+                                            radius_in_meters, 
+                                            queryset)
+        
 
         data = self.serializer_class(instance=queryset, many=True, context={'request': request}).data
 
