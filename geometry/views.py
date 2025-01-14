@@ -70,13 +70,26 @@ class GeometryViewSet(viewsets.ViewSet):
 
         queryset = self._get_filtered_queryset(queryset=self.queryset, query_params=query_params)
 
-        if query_params.get('latitude', None):
-            radius_in_meters = 5 * 1000  
+        
+        if query_params.get('latitude') and query_params.get('longitude'):
+            latitude = query_params.get('latitude')
+            longitude = query_params.get('longitude')
+        elif query_params.get('geographic_region_id'):
+            region = GeographicRegion.objects.get(id=query_params.get('geographic_region_id'))
+            latitude = region.latitude
+            longitude = region.longitude
+        else:
+            latitude = 0
+            longitude = 0   
 
-            queryset = get_nearby_locations(query_params.get('latitude'), 
-                                            query_params.get('longitude'), 
-                                            radius_in_meters, 
-                                            queryset)
+        radius_in_meters = 10 * 1000  
+
+        queryset = get_nearby_locations(latitude, 
+                                        longitude,
+                                        radius_in_meters, 
+                                        queryset)
+        
+
         
 
         data = self.serializer_class(instance=queryset, many=True, context={'request': request}).data
