@@ -71,7 +71,7 @@ class GeometryViewSet(viewsets.ViewSet):
         queryset = self._get_filtered_queryset(queryset=self.queryset, query_params=query_params)
 
         if query_params.get('latitude', None):
-            radius_in_meters = 5 * 10000  
+            radius_in_meters = 5 * 1000  
 
             queryset = get_nearby_locations(query_params.get('latitude'), 
                                             query_params.get('longitude'), 
