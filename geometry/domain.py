@@ -23,8 +23,8 @@ class GeoJsonCollection(BaseModel):
 class BaseGeometryObjectDomain(BaseModel):
     geometry: GeoJsonCollection = Field(..., description="Гео Json Обьект")
     info: Dict[str, Any] = Field(..., description="Инфо")
-    latitude: str | None = Field(...)
-    longitude: str | None = Field(...)
+    latitude: str | None = Field(default=None)
+    longitude: str | None = Field(default=None)
 
 class CreateGeometryObjectDomain(BaseGeometryObjectDomain):
     region_id: int = Field(...)
