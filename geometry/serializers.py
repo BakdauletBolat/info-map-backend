@@ -27,3 +27,4 @@ class GeometryObjectQueryParamsSerializer(serializers.Serializer):
     geographic_region_id = serializers.IntegerField()
     latitude = serializers.FloatField(required=False)
     longitude = serializers.FloatField(required=False)
+    zoom = serializers.IntegerField(required=False)

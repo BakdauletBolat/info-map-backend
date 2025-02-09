@@ -58,15 +58,40 @@ class GeometryViewSet(viewsets.ViewSet):
             return_query_set = return_query_set.filter(region_id__in=ids)
         return return_query_set
 
+    def get_meter_for_zoom(self, zoom: int):
+        zoom_to_tile_width = {
+            0: 40075016.69,
+            1: 20037508.34,
+            2: 10018754.17,
+            3: 5009377.09,
+            4: 2504688.54,
+            5: 1252344.27,
+            6: 626172.14,
+            7: 313086.07,
+            8: 156543.03,
+            9: 78271.52,
+            10: 39135.76,
+            11: 19567.88,
+            12: 9783.94,
+            13: 4891.97,
+            14: 2445.98,
+            15: 1222.99,
+            16: 611.50,
+            17: 305.75,
+            18: 152.87,
+            19: 76.44,
+            20: 38.22
+        }
+        return zoom_to_tile_width[zoom]
+
     def list(self, request):
         query_params_serializer = self.query_params_serializer(data=request.GET)
         query_params_serializer.is_valid(raise_exception=True)
         query_params = query_params_serializer.validated_data
-
+        latitude, longitude, zoom = None, None, 12
         if request.user.is_authenticated and hasattr(request.user, 'profile'):
             categories = request.user.profile.role.categories.all().values_list('id')
             query_params['category_ids'] = [*categories, *query_params.get('category_ids', [])]
-            print(query_params)
 
         queryset = self._get_filtered_queryset(queryset=self.queryset, query_params=query_params)
 
@@ -74,22 +99,23 @@ class GeometryViewSet(viewsets.ViewSet):
         if query_params.get('latitude') and query_params.get('longitude'):
             latitude = query_params.get('latitude')
             longitude = query_params.get('longitude')
-        elif query_params.get('geographic_region_id'):
+            zoom = query_params.get('zoom')
+        elif query_params.get('geographic_region_id') and latitude is None and longitude is None:
             region = GeographicRegion.objects.get(id=query_params.get('geographic_region_id'))
             latitude = region.latitude
             longitude = region.longitude
+            zoom = region.zoom
         else:
             latitude = 0
-            longitude = 0   
+            longitude = 0
 
-        radius_in_meters = 10 * 1000  
+
+        radius_in_meters = self.get_meter_for_zoom(zoom)
 
         queryset = get_nearby_locations(latitude, 
                                         longitude,
                                         radius_in_meters, 
                                         queryset)
-        
-
         
 
         data = self.serializer_class(instance=queryset, many=True, context={'request': request}).data
