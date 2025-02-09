@@ -82,7 +82,7 @@ class GeometryViewSet(viewsets.ViewSet):
             19: 76.44,
             20: 38.22
         }
-        return zoom_to_tile_width[zoom]
+        return zoom_to_tile_width[zoom] * 3
 
     def list(self, request):
         query_params_serializer = self.query_params_serializer(data=request.GET)
