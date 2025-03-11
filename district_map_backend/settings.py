@@ -35,7 +35,7 @@ except ImportError:
     from .prod_settings import *
     DEBUG = True
 
-ALLOWED_HOSTS = ["back.bolatb.kz", "localhost", "back1.easymenu.kz"]
+ALLOWED_HOSTS = ["back.baidybek-map.kz", "localhost", "back1.easymenu.kz"]
 
 # Application definition
 
@@ -133,7 +133,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-CSRF_TRUSTED_ORIGINS = ["https://back.bolatb.kz", "https://back1.easymenu.kz"]
+CSRF_TRUSTED_ORIGINS = ["https://back.baidybek-map.kz", "https://back1.easymenu.kz"]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
